@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Add Destination{% endblock %}
+{% block content %}
+
+<h2 class="mb-3">Add a new destination</h2>
+<form method="post" enctype="multipart/form-data" class="row g-3">
+    <div class="col-md-6">
+        <label class="form-label">Name *</label>
+        <input type="text" name="name" class="form-control" value="{{ form.get('name','') }}" required>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Country *</label>
+        <input type="text" name="country" class="form-control" value="{{ form.get('country','') }}" required>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">City</label>
+        <input type="text" name="city" class="form-control" value="{{ form.get('city','') }}">
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Category *</label>
+        <select name="category" class="form-select" required>
+            <option value="">Choose...</option>
+            {% for c in categories %}
+                <option value="{{ c }}" {% if form.get('category') == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Price per person (USD) *</label>
+        <input type="number" step="0.01" min="0" name="price" class="form-control" value="{{ form.get('price','') }}" required>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Photo</label>
+        <input type="file" name="image" class="form-control" accept=".png,.jpg,.jpeg,.gif,.webp">
+    </div>
+    <div class="col-12">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="4">{{ form.get('description','') }}</textarea>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Save destination</button>
+        <a href="{{ url_for('index') }}" class="btn btn-link">Cancel</a>
+    </div>
+</form>
+
+{% endblock %}
