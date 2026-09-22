@@ -1,0 +1,7 @@
+Flask==3.0.3
+azure-data-tables==12.5.0
+azure-storage-blob==12.22.0
+requests==2.32.3
+python-dotenv==1.0.1
+gunicorn==22.0.0
+Werkzeug==3.0.3
