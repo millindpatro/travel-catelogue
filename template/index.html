@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Browse Destinations{% endblock %}
+{% block content %}
+
+<form class="row g-2 mb-4 bg-light p-3 rounded" method="get" action="{{ url_for('index') }}">
+    <div class="col-md-4">
+        <label class="form-label">Country</label>
+        <input type="text" name="country" class="form-control" placeholder="e.g. India"
+               value="{{ filters.country }}">
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Category</label>
+        <select name="category" class="form-select">
+            <option value="">All categories</option>
+            {% for c in categories %}
+                <option value="{{ c }}" {% if filters.category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Max price ($)</label>
+        <input type="number" step="0.01" min="0" name="max_price" class="form-control"
+               value="{{ filters.max_price }}">
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100" type="submit">Filter</button>
+    </div>
+</form>
+
+{% if error %}
+    <div class="alert alert-warning">{{ error }}</div>
+{% endif %}
+
+{% if destinations %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for d in destinations %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if d.image_url %}
+                <img src="{{ d.image_url }}" class="card-img-top" style="height:180px;object-fit:cover;" alt="{{ d.name }}">
+            {% else %}
+                <div class="card-img-top bg-secondary-subtle d-flex align-items-center justify-content-center" style="height:180px;">
+                    <span class="text-muted">No image</span>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ d.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ d.city }}{% if d.city %}, {% endif %}{{ d.country }}</h6>
+                <span class="badge bg-info text-dark">{{ d.category }}</span>
+                <span class="badge bg-success">${{ "%.2f"|format(d.price) }}</span>
+                <p class="card-text mt-2">{{ d.description[:100] }}{% if d.description|length > 100 %}...{% endif %}</p>
+                <a href="{{ url_for('detail', row_key=d.RowKey) }}" class="btn btn-outline-primary btn-sm">View details</a>
+                <form method="post" action="{{ url_for('delete', row_key=d.RowKey) }}" class="d-inline"
+                      onsubmit="return confirm('Delete this destination?');">
+                    <button class="btn btn-outline-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p class="text-muted">No destinations match your filters yet.</p>
+{% endif %}
+
+{% endblock %}
