@@ -1,0 +1,9 @@
+.card {
+    transition: transform 0.15s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-4px);
+}
+.badge {
+    margin-right: 4px;
+}
